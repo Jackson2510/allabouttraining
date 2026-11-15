@@ -73,10 +73,18 @@
     .radio-label.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
     .schedule-item { border-left: 4px solid var(--primary); background: #ffffff; border-radius: 6px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 
-    /* RPG 헬스장 대시보드 */
-    .rpg-dashboard { display: flex; align-items: center; background: #fbbf24; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251,191,36,0.35); color: #451a03; }
-    .rpg-avatar { flex: 0 0 100px; height: 133px; background: rgba(255,255,255,0.6); border-radius: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-right: 16px; }
-    .rpg-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    /* 🌟 RPG 헬스장 대시보드 및 숨쉬기 애니메이션 🌟 */
+    .rpg-dashboard { background: #fbbf24; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251,191,36,0.35); color: #451a03; }
+    .rpg-flex { display: flex; align-items: center; }
+    
+    /* 캐릭터가 숨쉬듯 움직이는 대기 모션 */
+    @keyframes idleBreathe {
+      0% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.02) translateY(-2px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    .rpg-avatar { flex: 0 0 110px; height: 146px; background: rgba(255,255,255,0.6); border-radius: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-right: 16px; }
+    .rpg-avatar img { width: 100%; height: 100%; object-fit: contain; transform-origin: bottom center; animation: idleBreathe 2.5s ease-in-out infinite; }
   </style>
 </head>
 <body>
@@ -122,39 +130,56 @@
 
     <!-- RPG 대시보드 -->
     <div class="rpg-dashboard">
-      <div class="rpg-avatar">
-        <img id="dash-char-img" src="./images/male_member_1.png" alt="캐릭터">
-      </div>
-      <div style="flex: 1;">
-        <div style="font-size: 13px; font-weight: 800; color: #92400e; margin-bottom: 2px;">
-          Lv.<span id="dash-level">1</span> <span id="dash-rank">머글</span>
+      <div class="rpg-flex">
+        <div class="rpg-avatar">
+          <img id="dash-char-img" src="./images/male_member_1.png" alt="캐릭터">
         </div>
-        <div style="font-size: 19px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">
-          <span id="dash-name">홍길동</span> 회원님
-        </div>
-        <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
-          총 등록 횟수: <span id="dash-total">0</span>회
-        </div>
-        <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
-          누적 출석률: <span id="dash-attended" style="color: #ea580c; font-weight: 800;">0</span>회
-        </div>
-        <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
-          현재 잔여: <strong style="color: #dc2626; font-size: 14px;"><span id="dash-remain">0</span></strong>회
-        </div>
-        
-        <!-- 🌟 새롭게 추가된 예약 조회 UI 🌟 -->
-        <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600; display: flex; align-items: center;">
-          진행중 예약: <strong style="color: #2563eb; margin-left: 4px;"><span id="dash-upcoming-count">0</span></strong>건
-          <span onclick="toggleUpcoming()" style="margin-left: 8px; font-size: 10px; background: #fffbeb; color: #b45309; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; cursor: pointer;">상세보기 ▾</span>
-        </div>
-        <div id="dash-upcoming-list" style="display: none; background: rgba(255,255,255,0.7); border-radius: 6px; padding: 8px; margin-top: 6px; margin-bottom: 4px; font-size: 11px; color: #451a03; line-height: 1.5;">
-          <!-- 예약 내역이 여기에 렌더링 됩니다 -->
-        </div>
-        <!-- 🌟 끝 🌟 -->
+        <div style="flex: 1;">
+          <div style="font-size: 13px; font-weight: 800; color: #92400e; margin-bottom: 2px;">
+            Lv.<span id="dash-level">1</span> <span id="dash-rank">머글</span>
+          </div>
+          <div style="font-size: 19px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">
+            <span id="dash-name">홍길동</span> 회원님
+          </div>
+          <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
+            총 등록 횟수: <span id="dash-total">0</span>회
+          </div>
+          <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
+            누적 출석률: <span id="dash-attended" style="color: #ea580c; font-weight: 800;">0</span>회
+          </div>
+          <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
+            현재 잔여: <strong style="color: #dc2626; font-size: 14px;"><span id="dash-remain">0</span></strong>회
+          </div>
+          
+          <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600; display: flex; align-items: center;">
+            진행중 예약: <strong style="color: #2563eb; margin-left: 4px;"><span id="dash-upcoming-count">0</span></strong>건
+            <span onclick="toggleUpcoming()" style="margin-left: 8px; font-size: 10px; background: #fffbeb; color: #b45309; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; cursor: pointer;">상세보기 ▾</span>
+          </div>
+          <div id="dash-upcoming-list" style="display: none; background: rgba(255,255,255,0.7); border-radius: 6px; padding: 8px; margin-top: 6px; margin-bottom: 4px; font-size: 11px; color: #451a03; line-height: 1.5;">
+            <!-- 예약 내역이 렌더링 됩니다 -->
+          </div>
 
-        <div style="font-size: 11px; margin-top: 6px; font-weight: 500; opacity: 0.8;">
-          유효기간: <span id="dash-expire">2026.12.31</span>까지
+          <div style="font-size: 11px; margin-top: 6px; font-weight: 500; opacity: 0.8;">
+            유효기간: <span id="dash-expire">2026.12.31</span>까지
+          </div>
         </div>
+      </div>
+      
+      <!-- 🌟 진화 등급 혜택 안내 (새로 추가) 🌟 -->
+      <div style="margin-top: 12px; font-size: 12px; text-align: center; background: #fef3c7; color: #b45309; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 1px solid #fde68a;" onclick="toggleBenefits()">
+        🏆 레벨별 진화 등급 및 혜택 보기 ▾
+      </div>
+      <div id="dash-benefits-list" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; margin-top: 6px; font-size: 12px; color: #78350f; line-height: 1.6;">
+        <div style="color: #dc2626; font-weight: 900; text-align: center; margin-bottom: 8px; font-size: 13px;">📈 누적 수업 10회당 1레벨 상승!</div>
+        <div><strong>Lv.1 머글</strong> &nbsp; | &nbsp; <strong>Lv.2 헬아기</strong></div>
+        <div style="margin-top: 4px;"><strong>Lv.3 헬린이</strong> : 재등록 시 1만원 할인</div>
+        <div style="margin-top: 4px;"><strong>Lv.4 중수</strong> : 재등록 시 2만원 할인</div>
+        <div style="margin-top: 4px;"><strong>Lv.5 쇠질러</strong> : 2만원 할인 + 필라테스 10회</div>
+        <div style="margin-top: 4px;"><strong>Lv.6 프로 쇠질러</strong> : 2만원 할인 + 필라테스 20회</div>
+        <div style="margin-top: 4px;"><strong>Lv.7 근육술사</strong> : 2만원 할인 + 필라테스 무제한</div>
+        <div style="margin-top: 4px;"><strong>Lv.8 강철인간</strong> : 3만원 할인 + 필라테스 무제한</div>
+        <div style="margin-top: 4px;"><strong>Lv.9 헬창인간</strong> : 4만원 할인 + 필라테스 무제한</div>
+        <div style="margin-top: 4px;"><strong>Lv.10 운동선수</strong> : 5만원 할인 + 필라테스 무제한</div>
       </div>
     </div>
 
@@ -307,6 +332,12 @@
     "2026-09-25": "추석", "2026-09-26": "추석연휴"
   };
 
+  // 대시보드 혜택보기 토글
+  function toggleBenefits() {
+    const list = document.getElementById("dash-benefits-list");
+    list.style.display = list.style.display === "none" ? "block" : "none";
+  }
+
   // 대시보드 진행중 예약 상세보기 토글
   function toggleUpcoming() {
     const list = document.getElementById("dash-upcoming-list");
@@ -378,7 +409,7 @@
     document.getElementById("view-login").classList.add("active");
   }
 
-  // 🌟 메인 화면 로딩 시 예약 데이터를 불러와 대시보드에 뿌려줌 🌟
+  // 🌟 메인 화면 로딩 🌟
   async function showMemberView(isAuto = false) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.getElementById("view-member").classList.add("active");
@@ -401,7 +432,6 @@
     document.getElementById("dash-remain").innerText = remain;
     document.getElementById("dash-expire").innerText = currentUser.expireDate || "지정안됨";
 
-    // 대시보드 '진행중 예약' 목록 데이터 불러오기
     try {
       const snap = await db.collection("reservations").where("gymId", "==", currentGymId).where("memberId", "==", currentUser.id).where("status", "==", "예약완료").get();
       const schedules = snap.docs.map(d => d.data());
@@ -532,7 +562,7 @@
       await db.collection("members").doc(currentUser.id).update({ remainingSessions: newRem, lastBookingDate: selectedDate });
       currentUser.remainingSessions = newRem;
       alert("예약되었습니다."); 
-      showMemberView(true); // 대시보드 갱신
+      showMemberView(true);
       switchMemberSubTab('my');
     } catch (err) { alert("예약 오류"); }
   }
@@ -566,7 +596,7 @@
       await db.collection("members").doc(currentUser.id).update({ remainingSessions: newRem });
       currentUser.remainingSessions = newRem;
       alert("취소되었습니다."); 
-      showMemberView(true); // 대시보드 갱신
+      showMemberView(true);
       switchMemberSubTab('my');
     } catch (err) { alert("취소 오류"); }
   }
