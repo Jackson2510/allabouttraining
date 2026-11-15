@@ -19,15 +19,17 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", sans-serif; }
     
-    /* 🌟 명예의 전당 레이아웃 추가 🌟 */
+    /* 🌟 명예의 전당 레이아웃 🌟 */
     body { background-color: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; gap: 24px; align-items: flex-start; }
+    .container { flex: 1; width: 100%; max-width: 500px; background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 24px; order: 1; }
+    .hall-of-fame-sidebar { width: 300px; background: #fffbeb; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(251,191,36,0.15); padding: 20px; border: 2px solid #fde68a; height: fit-content; order: 0; }
+    
+    /* 스마트폰 등 좁은 화면에서는 명예의 전당을 아래로 내림 */
     @media (max-width: 850px) {
       body { flex-direction: column; align-items: center; }
       .hall-of-fame-sidebar { order: 2; width: 100%; max-width: 500px !important; margin-top: 20px; }
     }
-    .hall-of-fame-sidebar { width: 300px; background: #fffbeb; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(251,191,36,0.15); padding: 20px; border: 2px solid #fde68a; height: fit-content; }
 
-    .container { width: 100%; max-width: 500px; background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 24px; }
     h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
     .sub-desc { text-align: center; font-size: 14px; color: var(--sub-text); margin-bottom: 20px; }
     .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
@@ -76,7 +78,7 @@
     .radio-label.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
     .schedule-item { border-left: 4px solid var(--primary); background: #ffffff; border-radius: 6px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 
-    /* RPG 대시보드 및 숨쉬기 애니메이션 */
+    /* RPG 대시보드 및 애니메이션 */
     .rpg-dashboard { background: #fbbf24; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251,191,36,0.35); color: #451a03; }
     .rpg-flex { display: flex; align-items: center; }
     @keyframes idleBreathe {
@@ -87,7 +89,7 @@
     .rpg-avatar { flex: 0 0 110px; height: 146px; background: rgba(255,255,255,0.6); border-radius: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-right: 16px; }
     .rpg-avatar img { width: 100%; height: 100%; object-fit: contain; transform-origin: bottom center; animation: idleBreathe 2.5s ease-in-out infinite; }
     
-    /* 검색 드롭다운 호버 */
+    /* 검색 자동완성 드롭다운 호버 */
     .proxy-member-item { padding: 12px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #e2e8f0; transition: background 0.15s; }
     .proxy-member-item:hover { background: #f8fafc; }
   </style>
@@ -123,6 +125,7 @@
       <button type="button" onclick="loginTrainer()">관리자 접속하기</button>
     </div>
 
+    <!-- 잭슨쌤 추천 배너 -->
     <a href="https://link.inpock.co.kr/real_health_consume" target="_blank" style="display: flex; align-items: center; gap: 16px; text-decoration: none; margin-top: 32px; padding: 20px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #4ade80; border-radius: 16px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);">
       <div style="width: 52px; height: 52px; min-width: 52px; background: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="#ffffff"><path d="M2 20h2c.55 0 1-.45 1-1v-9c0-.55-.45-1-1-1H2v11zm19.83-7.12c.11-.25.17-.52.17-.88 0-1.1-.9-2-2-2h-5.5l.92-4.65c.05-.22.02-.46-.08-.66-.23-.45-.52-.86-.88-1.22L14 3 7.59 9.41C7.21 9.79 7 10.3 7 10.83V19c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2.12z"/></svg>
@@ -241,7 +244,7 @@
       <div id="unbooked-members-list">데이터 불러오는 중...</div>
     </div>
 
-    <!-- 🌟 신규 등록 폼 개선 (잔여횟수 추가) 🌟 -->
+    <!-- 신규 등록 폼 개선 (잔여횟수 포함) -->
     <div id="sub-trainer-add" style="display: none;">
       <label>회원 성별</label>
       <select id="new-gender" style="margin-bottom: 14px;"><option value="male">남성</option><option value="female">여성</option></select>
@@ -252,21 +255,25 @@
         <div style="flex: 1;"><label>총 등록 횟수</label><input type="number" id="new-total" value="30"></div>
         <div style="flex: 1;"><label>현재 잔여 횟수</label><input type="number" id="new-remaining" value="30"></div>
       </div>
-      <div style="font-size: 11px; color: var(--sub-text); margin-bottom: 14px; margin-top: -6px;">※ 기존 회원을 등록할 때는 정확한 남은 잔여 횟수를 적어주세요.</div>
+      <div style="font-size: 11px; color: var(--sub-text); margin-bottom: 14px; margin-top: -6px;">※ 기존 회원을 등록할 때는 정확한 남은 횟수를 적어주세요.</div>
 
       <label>유효기간 (만료 날짜)</label><input type="date" id="new-expire">
       <label>주요 운동 목표</label><input type="text" id="new-goal" placeholder="체형 교정, 다이어트 등">
       <button type="button" onclick="registerMember()">신규 회원 저장</button>
     </div>
 
+    <!-- 🌟 트레이너 캘린더 (일괄 등록 버튼 추가) 🌟 -->
     <div id="sub-trainer-calendar" style="display: none;">
       <label>확인할 날짜 선택</label>
       <div class="calendar-strip" id="trainer-calendar-strip"></div>
       <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px;"><span id="disp-trainer-date" style="color: var(--primary);"></span> 예약 일정</div>
       <div id="trainer-schedule-list">일정을 불러오는 중...</div>
+      
+      <!-- 구글 캘린더 다운로드 버튼 -->
+      <button type="button" id="btn-batch-gcal" onclick="batchRegisterCalendar()" style="margin-top: 16px; background: #10b981; display: none;">📅 구글 캘린더 일괄 등록하기</button>
     </div>
 
-    <!-- 🌟 대리 예약 관리창 (자동완성 검색 기능) 🌟 -->
+    <!-- 대리 예약 관리창 (이름 검색) -->
     <div id="sub-trainer-selfbook" style="display: none;">
       <label>예약 처리 모드 선택</label>
       <div class="radio-group">
@@ -283,7 +290,6 @@
         <label>대리 예약할 회원 검색 (이름 입력)</label>
         <input type="text" id="proxy-member-search" placeholder="회원 이름 검색 (예: 김, 유정)" oninput="filterProxyMembers()" autocomplete="off">
         <input type="hidden" id="proxy-member-id">
-        <!-- 검색결과 드롭다운 레이어 -->
         <div id="proxy-member-list" style="display: none; position: absolute; top: 74px; left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; max-height: 220px; overflow-y: auto; z-index: 100; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);"></div>
         <div style="font-size: 12px; color: var(--danger); margin-bottom: 14px; margin-top: 8px;">※ 예약 확정 시 선택한 회원의 횟수가 1회 즉시 차감됩니다.</div>
       </div>
@@ -303,7 +309,6 @@
       <button type="button" onclick="cancelEditMember()" style="width: auto; padding: 6px 12px; font-size: 12px;" class="sub-btn">뒤로 가기</button>
     </div>
 
-    <!-- 🌟 수정 창 내 캐릭터 상태창 🌟 -->
     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: #fffbeb; border-radius: 8px; border: 1px solid #fde68a;">
       <img id="edit-char-img" src="" style="width: 60px; height: 80px; object-fit: contain;">
       <div>
@@ -357,6 +362,7 @@
   let currentGymData = null; let currentUser = null;
   let selectedDate = null; let selectedTimeSlot = null; let trainerSelectedDate = null;
   let allMembersData = []; let currentBookMode = "personal"; 
+  let currentDaySchedules = []; // 일괄 등록용 변수
 
   const morningTimes = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"];
   const eveningTimes = ["16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00"];
@@ -371,7 +377,7 @@
     "2026-09-25": "추석", "2026-09-26": "추석연휴"
   };
 
-  // 🌟 명예의 전당 집계 함수 🌟
+  // 🌟 명예의 전당 집계 (탑 3만 노출) 🌟
   async function loadHallOfFame() {
     const hofList = document.getElementById("hof-list");
     if (!hofList) return;
@@ -385,19 +391,17 @@
         const total = m.totalSessions || 0;
         const remain = m.remainingSessions || 0;
         const attended = Math.max(0, total - remain);
-        
         let level = Math.floor(attended / 10) + 1;
         if (level > 10) level = 10;
         
-        // 10회 이상 (2레벨) 부터 등재
         if (level >= 2) members.push({ name: m.name, level: level, attended: attended });
       });
       
       members.sort((a, b) => b.attended - a.attended);
       
       let html = "";
-      members.slice(0, 15).forEach((m, idx) => {
-        // 이름 마스킹 처리 (김종필 -> 김xx)
+      // 🌟 탑 3명만 슬라이스하여 표시
+      members.slice(0, 3).forEach((m, idx) => {
         const maskedName = m.name.charAt(0) + "x".repeat(Math.max(1, m.name.length - 1));
         html += `
           <div style="display:flex; align-items:center; margin-bottom:10px; background:#ffffff; padding:12px; border-radius:10px; box-shadow:0 2px 8px rgba(217,119,6,0.1);">
@@ -455,7 +459,7 @@
           if (!snap.empty) { currentUser = { id: snap.docs[0].id, ...snap.docs[0].data() }; showMemberView(true); }
         }
       }
-      loadHallOfFame(); // 명예의 전당 실행
+      loadHallOfFame();
     } catch (err) { alert("로드 실패"); }
   }
   initGym();
@@ -692,7 +696,6 @@
     if (tab === 'calendar') renderMonthCalendar("trainer-calendar-strip", false);
     if (tab === 'selfbook') {
       renderMonthCalendar("trainer-self-cal-strip", false);
-      // 대리예약 탭 진입 시 검색창 초기화
       document.getElementById("proxy-member-search").value = "";
       document.getElementById("proxy-member-id").value = "";
       document.getElementById("proxy-member-list").style.display = "none";
@@ -742,15 +745,26 @@
     } catch (err) { list.innerHTML = "조회 실패"; }
   }
 
+  // 🌟 관리자 캘린더 화면 렌더링 🌟
   async function loadTrainerSchedule() {
     if (!trainerSelectedDate) return;
     document.getElementById("disp-trainer-date").innerText = trainerSelectedDate;
     const list = document.getElementById("trainer-schedule-list"); list.innerHTML = "조회 중...";
+    const btnBatch = document.getElementById("btn-batch-gcal");
+    
     try {
       const snap = await db.collection("reservations").where("gymId", "==", currentGymId).where("date", "==", trainerSelectedDate).where("status", "==", "예약완료").get();
-      if (snap.empty) { list.innerHTML = "<p style='text-align:center;'>일정이 없습니다.</p>"; return; }
+      if (snap.empty) { 
+        list.innerHTML = "<p style='text-align:center;'>일정이 없습니다.</p>"; 
+        btnBatch.style.display = "none";
+        return; 
+      }
       const schedules = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
       schedules.sort((a, b) => a.time.localeCompare(b.time));
+      
+      currentDaySchedules = schedules; 
+      btnBatch.style.display = "block"; // 일괄 등록 버튼 보이기
+      
       list.innerHTML = "";
       schedules.forEach(s => {
         const isSelf = (s.memberId === "admin-self-booking");
@@ -762,6 +776,51 @@
         list.appendChild(item);
       });
     } catch (err) { list.innerHTML = "조회 실패"; }
+  }
+
+  // 🌟 구글 캘린더 파일(.ics) 일괄 다운로드 함수 🌟
+  function batchRegisterCalendar() {
+    if (!currentDaySchedules || currentDaySchedules.length === 0) return alert("등록할 일정이 없습니다.");
+
+    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//AllAboutTraining//PT Schedule//KO\n";
+    let addedCount = 0;
+
+    currentDaySchedules.forEach(s => {
+      if (s.status === "취소") return;
+      addedCount++;
+
+      let title = s.memberName;
+      if (s.memberId !== "admin-self-booking") {
+        const mem = allMembersData.find(m => m.id === s.memberId);
+        const rem = mem ? mem.remainingSessions : '?';
+        title = `${s.memberName} (${rem}회)`;
+      }
+
+      const [yyyy, mm, dd] = s.date.split("-");
+      const [hh, min] = s.time.split(":");
+      const startStr = `${yyyy}${mm}${dd}T${hh}${min}00`;
+      let endH = parseInt(hh, 10) + 1;
+      const endStr = `${yyyy}${mm}${dd}T${String(endH).padStart(2, '0')}${min}00`;
+
+      icsContent += "BEGIN:VEVENT\n";
+      icsContent += `SUMMARY:${title}\n`;
+      icsContent += `DTSTART:${startStr}\n`;
+      icsContent += `DTEND:${endStr}\n`;
+      icsContent += `DESCRIPTION:${s.condition || ''}\n`;
+      icsContent += "END:VEVENT\n";
+    });
+
+    icsContent += "END:VCALENDAR";
+    if (addedCount === 0) return alert("등록할 유효한 일정이 없습니다.");
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `PT일정_${trainerSelectedDate}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert("일정 파일이 다운로드 되었습니다.\n받으신 파일을 열면 스마트폰/구글 캘린더에 일괄 등록됩니다!");
   }
 
   async function forceCancelReservation(resId, mName, mId) {
@@ -784,11 +843,10 @@
     document.getElementById("area-proxy-input").style.display = mode === "proxy" ? "block" : "none";
   }
 
-  // 🌟 대리예약 회원 자동완성(초성/이름) 검색 함수 🌟
   function filterProxyMembers() {
     const query = document.getElementById("proxy-member-search").value.toLowerCase();
     const listDiv = document.getElementById("proxy-member-list");
-    document.getElementById("proxy-member-id").value = ""; // 검색어 바뀌면 선택 초기화
+    document.getElementById("proxy-member-id").value = ""; 
     
     if (!query) { listDiv.style.display = "none"; return; }
     if (allMembersData.length === 0) { listDiv.style.display = "none"; return; }
@@ -803,7 +861,6 @@
     listDiv.style.display = "block";
   }
 
-  // 검색목록에서 클릭 시 선택 처리
   function selectProxyMember(id, name) {
     document.getElementById("proxy-member-id").value = id;
     document.getElementById("proxy-member-search").value = name;
@@ -834,8 +891,7 @@
       } catch (err) { alert("오류발생"); }
     } else if (currentBookMode === "proxy") {
       const mId = document.getElementById("proxy-member-id").value;
-      if (!mId) return alert("대리 예약할 회원을 정확히 검색 후 선택해 주세요.");
-      
+      if (!mId) return alert("회원 선택 필수");
       const targetM = allMembersData.find(m => m.id === mId);
       if (!confirm(`[${targetM.name}] 대리 예약 진행 시 횟수가 1회 즉시 차감됩니다.`)) return;
       try {
@@ -844,7 +900,7 @@
         alert("대리 예약 확정(차감됨)"); 
         loadUnbookedMembers(); 
         loadTrainerSelfSlots(date);
-        loadHallOfFame(); // 전당도 업데이트
+        loadHallOfFame(); 
         document.getElementById("proxy-member-search").value = "";
         document.getElementById("proxy-member-id").value = "";
       } catch (err) { alert("오류발생"); }
@@ -868,12 +924,10 @@
     } catch (err) { list.innerHTML = "조회 실패"; }
   }
 
-  // 🌟 정보수정 렌더링 시 레벨, 출석횟수, 이미지 계산 로직 추가 🌟
   function editMemberInfo(mId, name, rem, tot, goal, phone, gender, expire) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.getElementById("view-edit-member").classList.add("active");
     
-    // 레벨 및 캐릭터 업데이트
     const attended = Math.max(0, tot - rem);
     let level = Math.floor(attended / 10) + 1;
     if (level > 10) level = 10;
@@ -908,15 +962,12 @@
     } catch (err) { alert("오류"); }
   }
 
-  // 🌟 신규 등록 시 총횟수 & 현재잔여횟수 각각 입력받아 저장 🌟
   async function registerMember() {
-    const n = document.getElementById("new-name").value.trim(); 
-    const p = document.getElementById("new-phone").value.trim();
+    const n = document.getElementById("new-name").value.trim(); const p = document.getElementById("new-phone").value.trim();
     const t = parseInt(document.getElementById("new-total").value, 10) || 0; 
     const r = parseInt(document.getElementById("new-remaining").value, 10) || 0;
     const g = document.getElementById("new-goal").value.trim();
-    const gender = document.getElementById("new-gender").value; 
-    const expire = document.getElementById("new-expire").value;
+    const gender = document.getElementById("new-gender").value; const expire = document.getElementById("new-expire").value;
     
     if (!n || !p) return alert("이름/번호를 입력하세요.");
     if (!expire) return alert("유효기간(만료 날짜)을 선택해 주세요.");
