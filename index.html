@@ -18,7 +18,15 @@
       --border: #e2e8f0; --radius: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Pretendard", sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; }
+    
+    /* 🌟 명예의 전당 레이아웃 추가 🌟 */
+    body { background-color: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; gap: 24px; align-items: flex-start; }
+    @media (max-width: 850px) {
+      body { flex-direction: column; align-items: center; }
+      .hall-of-fame-sidebar { order: 2; width: 100%; max-width: 500px !important; margin-top: 20px; }
+    }
+    .hall-of-fame-sidebar { width: 300px; background: #fffbeb; border-radius: var(--radius); box-shadow: 0 4px 20px rgba(251,191,36,0.15); padding: 20px; border: 2px solid #fde68a; height: fit-content; }
+
     .container { width: 100%; max-width: 500px; background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 4px 20px rgba(0,0,0,0.06); padding: 24px; }
     h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; text-align: center; }
     .sub-desc { text-align: center; font-size: 14px; color: var(--sub-text); margin-bottom: 20px; }
@@ -43,22 +51,18 @@
     .badge-danger { background: #fee2e2; color: #b91c1c; }
     .quick-box { display: flex; gap: 8px; margin-bottom: 14px; }
 
-    /* 🌟 바둑판 달력 및 주말/공휴일 스타일 🌟 */
+    /* 바둑판 달력 및 공휴일 */
     .calendar-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
     .cal-day-btn { padding: 4px 2px; border: 1px solid var(--border); border-radius: 6px; text-align: center; cursor: pointer; background: #fff; transition: 0.15s; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 56px; }
     .cal-day-btn .day-label { font-size: 10px; color: var(--sub-text); margin-bottom: 2px; }
     .cal-day-btn .date-label { font-size: 14px; font-weight: 700; }
-    
     .cal-day-btn.saturday { color: #2563eb; background: #eff6ff; border-color: #bfdbfe; }
     .cal-day-btn.saturday .day-label { color: #2563eb; }
-    
     .cal-day-btn.sunday { color: #ef4444; background: #fef2f2; border-color: #fca5a5; }
     .cal-day-btn.sunday .day-label { color: #ef4444; }
-    
     .cal-day-btn.active { background: var(--primary) !important; border-color: var(--primary) !important; color: #fff !important; }
     .cal-day-btn.active .day-label { color: #e0e7ff !important; }
     .cal-day-btn.active .holiday-name { color: #fef08a !important; }
-    
     .holiday-name { font-size: 9px; font-weight: 800; color: #ef4444; margin-top: 3px; letter-spacing: -0.5px; line-height: 1.1; word-break: keep-all; text-align: center; }
 
     /* 시간표 그리드 */
@@ -66,18 +70,15 @@
     .time-chip { padding: 10px; text-align: center; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; cursor: pointer; background: #fff; }
     .time-chip.selected { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: bold; }
     .time-chip.disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
-    
     .radio-group { display: flex; gap: 8px; margin-bottom: 14px; }
     .radio-label { flex: 1; text-align: center; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; color: var(--sub-text); background: #fff; transition: 0.2s; }
     .radio-label input { display: none; }
     .radio-label.active { border-color: var(--primary); background: #eff6ff; color: var(--primary); }
     .schedule-item { border-left: 4px solid var(--primary); background: #ffffff; border-radius: 6px; padding: 12px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 
-    /* 🌟 RPG 헬스장 대시보드 및 숨쉬기 애니메이션 🌟 */
+    /* RPG 대시보드 및 숨쉬기 애니메이션 */
     .rpg-dashboard { background: #fbbf24; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(251,191,36,0.35); color: #451a03; }
     .rpg-flex { display: flex; align-items: center; }
-    
-    /* 캐릭터가 숨쉬듯 움직이는 대기 모션 */
     @keyframes idleBreathe {
       0% { transform: scale(1) translateY(0); }
       50% { transform: scale(1.02) translateY(-2px); }
@@ -85,9 +86,21 @@
     }
     .rpg-avatar { flex: 0 0 110px; height: 146px; background: rgba(255,255,255,0.6); border-radius: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-right: 16px; }
     .rpg-avatar img { width: 100%; height: 100%; object-fit: contain; transform-origin: bottom center; animation: idleBreathe 2.5s ease-in-out infinite; }
+    
+    /* 검색 드롭다운 호버 */
+    .proxy-member-item { padding: 12px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #e2e8f0; transition: background 0.15s; }
+    .proxy-member-item:hover { background: #f8fafc; }
   </style>
 </head>
 <body>
+
+<!-- 🌟 좌측 명예의 전당 🌟 -->
+<div class="hall-of-fame-sidebar" id="hof-sidebar">
+  <div style="font-size:19px; font-weight:900; margin-bottom:18px; color:#92400e; text-align:center;">🏆 명예의 전당 🏆</div>
+  <div id="hof-list">
+    <div style="text-align:center; font-size:13px; color:#b45309; margin-top:20px;">집계 중...</div>
+  </div>
+</div>
 
 <div class="container" id="app-container">
   <h1 id="gym-title">모두의 트레이닝</h1>
@@ -150,22 +163,16 @@
           <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600;">
             현재 잔여: <strong style="color: #dc2626; font-size: 14px;"><span id="dash-remain">0</span></strong>회
           </div>
-          
           <div style="font-size: 12px; margin-bottom: 3px; font-weight: 600; display: flex; align-items: center;">
             진행중 예약: <strong style="color: #2563eb; margin-left: 4px;"><span id="dash-upcoming-count">0</span></strong>건
             <span onclick="toggleUpcoming()" style="margin-left: 8px; font-size: 10px; background: #fffbeb; color: #b45309; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; cursor: pointer;">상세보기 ▾</span>
           </div>
-          <div id="dash-upcoming-list" style="display: none; background: rgba(255,255,255,0.7); border-radius: 6px; padding: 8px; margin-top: 6px; margin-bottom: 4px; font-size: 11px; color: #451a03; line-height: 1.5;">
-            <!-- 예약 내역이 렌더링 됩니다 -->
-          </div>
-
+          <div id="dash-upcoming-list" style="display: none; background: rgba(255,255,255,0.7); border-radius: 6px; padding: 8px; margin-top: 6px; margin-bottom: 4px; font-size: 11px; color: #451a03; line-height: 1.5;"></div>
           <div style="font-size: 11px; margin-top: 6px; font-weight: 500; opacity: 0.8;">
             유효기간: <span id="dash-expire">2026.12.31</span>까지
           </div>
         </div>
       </div>
-      
-      <!-- 🌟 진화 등급 혜택 안내 (새로 추가) 🌟 -->
       <div style="margin-top: 12px; font-size: 12px; text-align: center; background: #fef3c7; color: #b45309; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; border: 1px solid #fde68a;" onclick="toggleBenefits()">
         🏆 레벨별 진화 등급 및 혜택 보기 ▾
       </div>
@@ -234,12 +241,19 @@
       <div id="unbooked-members-list">데이터 불러오는 중...</div>
     </div>
 
+    <!-- 🌟 신규 등록 폼 개선 (잔여횟수 추가) 🌟 -->
     <div id="sub-trainer-add" style="display: none;">
       <label>회원 성별</label>
       <select id="new-gender" style="margin-bottom: 14px;"><option value="male">남성</option><option value="female">여성</option></select>
       <label>회원 이름</label><input type="text" id="new-name" placeholder="예: 김회원">
       <label>전화번호 (- 없이 입력)</label><input type="tel" id="new-phone" placeholder="01012345678">
-      <label>등록 PT 횟수</label><input type="number" id="new-total" value="30">
+      
+      <div style="display: flex; gap: 8px;">
+        <div style="flex: 1;"><label>총 등록 횟수</label><input type="number" id="new-total" value="30"></div>
+        <div style="flex: 1;"><label>현재 잔여 횟수</label><input type="number" id="new-remaining" value="30"></div>
+      </div>
+      <div style="font-size: 11px; color: var(--sub-text); margin-bottom: 14px; margin-top: -6px;">※ 기존 회원을 등록할 때는 정확한 남은 잔여 횟수를 적어주세요.</div>
+
       <label>유효기간 (만료 날짜)</label><input type="date" id="new-expire">
       <label>주요 운동 목표</label><input type="text" id="new-goal" placeholder="체형 교정, 다이어트 등">
       <button type="button" onclick="registerMember()">신규 회원 저장</button>
@@ -252,6 +266,7 @@
       <div id="trainer-schedule-list">일정을 불러오는 중...</div>
     </div>
 
+    <!-- 🌟 대리 예약 관리창 (자동완성 검색 기능) 🌟 -->
     <div id="sub-trainer-selfbook" style="display: none;">
       <label>예약 처리 모드 선택</label>
       <div class="radio-group">
@@ -263,7 +278,16 @@
         </label>
       </div>
       <div id="area-personal-input"><label>사유</label><input type="text" id="self-memo" placeholder="예: 식사 시간 등"></div>
-      <div id="area-proxy-input" style="display: none;"><label>대리 예약할 회원</label><select id="proxy-member-select"><option value="">불러오는 중...</option></select></div>
+      
+      <div id="area-proxy-input" style="display: none; position: relative;">
+        <label>대리 예약할 회원 검색 (이름 입력)</label>
+        <input type="text" id="proxy-member-search" placeholder="회원 이름 검색 (예: 김, 유정)" oninput="filterProxyMembers()" autocomplete="off">
+        <input type="hidden" id="proxy-member-id">
+        <!-- 검색결과 드롭다운 레이어 -->
+        <div id="proxy-member-list" style="display: none; position: absolute; top: 74px; left: 0; right: 0; background: #fff; border: 1px solid var(--border); border-radius: 8px; max-height: 220px; overflow-y: auto; z-index: 100; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);"></div>
+        <div style="font-size: 12px; color: var(--danger); margin-bottom: 14px; margin-top: 8px;">※ 예약 확정 시 선택한 회원의 횟수가 1회 즉시 차감됩니다.</div>
+      </div>
+
       <label>예약 날짜 선택</label><div class="calendar-strip" id="trainer-self-cal-strip"></div>
       <label>예약 시간 선택</label><div class="grid-times" id="trainer-self-time-grid"></div>
       <button type="button" id="btn-submit-trainer-booking" onclick="submitTrainerBooking()" disabled>관리자 예약 확정하기</button>
@@ -272,16 +296,31 @@
     <div id="sub-trainer-recent" style="display: none;"><div id="trainer-recent-list">조회 중...</div></div>
   </div>
 
-  <!-- 4. 정보 수정 화면 -->
+  <!-- 4. 정보 수정 화면 (레벨/캐릭터 표시 추가) -->
   <div id="view-edit-member" class="section">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
       <span style="font-weight: 700; font-size: 17px;">회원 정보 수정</span>
       <button type="button" onclick="cancelEditMember()" style="width: auto; padding: 6px 12px; font-size: 12px;" class="sub-btn">뒤로 가기</button>
     </div>
+
+    <!-- 🌟 수정 창 내 캐릭터 상태창 🌟 -->
+    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 12px 16px; background: #fffbeb; border-radius: 8px; border: 1px solid #fde68a;">
+      <img id="edit-char-img" src="" style="width: 60px; height: 80px; object-fit: contain;">
+      <div>
+        <div style="font-size: 13px; color: #92400e; font-weight: 800; margin-bottom: 4px;">Lv.<span id="edit-level-disp"></span> <span id="edit-rank-disp"></span></div>
+        <div style="font-size: 12px; color: #b45309; font-weight: 600;">누적 출석: <span id="edit-attended-disp" style="color: #ea580c; font-weight: 800;"></span>회</div>
+        <div style="font-size: 11px; color: #d97706; margin-top: 4px;">10회 출석당 1레벨업</div>
+      </div>
+    </div>
+
     <input type="hidden" id="edit-member-id">
-    <label>성별</label><select id="edit-gender"><option value="male">남성</option><option value="female">여성</option></select>
-    <label>총 등록 횟수</label><input type="number" id="edit-total">
-    <label>남은 횟수 (잔여)</label><input type="number" id="edit-remaining">
+    <label>성별</label><select id="edit-gender" style="margin-bottom: 14px;"><option value="male">남성</option><option value="female">여성</option></select>
+    
+    <div style="display: flex; gap: 8px;">
+      <div style="flex: 1;"><label>총 등록 횟수</label><input type="number" id="edit-total"></div>
+      <div style="flex: 1;"><label>남은 횟수 (잔여)</label><input type="number" id="edit-remaining"></div>
+    </div>
+    
     <label>유효기간</label><input type="date" id="edit-expire">
     <label>운동 목표</label><input type="text" id="edit-goal">
     <label>회원 이름</label><input type="text" id="edit-name">
@@ -332,13 +371,57 @@
     "2026-09-25": "추석", "2026-09-26": "추석연휴"
   };
 
-  // 대시보드 혜택보기 토글
+  // 🌟 명예의 전당 집계 함수 🌟
+  async function loadHallOfFame() {
+    const hofList = document.getElementById("hof-list");
+    if (!hofList) return;
+    try {
+      const snap = await db.collection("members").where("gymId", "==", currentGymId).get();
+      let members = [];
+      snap.docs.forEach(doc => {
+        const m = doc.data();
+        if (m.role === 'trainer' || m.role === 'admin') return;
+        
+        const total = m.totalSessions || 0;
+        const remain = m.remainingSessions || 0;
+        const attended = Math.max(0, total - remain);
+        
+        let level = Math.floor(attended / 10) + 1;
+        if (level > 10) level = 10;
+        
+        // 10회 이상 (2레벨) 부터 등재
+        if (level >= 2) members.push({ name: m.name, level: level, attended: attended });
+      });
+      
+      members.sort((a, b) => b.attended - a.attended);
+      
+      let html = "";
+      members.slice(0, 15).forEach((m, idx) => {
+        // 이름 마스킹 처리 (김종필 -> 김xx)
+        const maskedName = m.name.charAt(0) + "x".repeat(Math.max(1, m.name.length - 1));
+        html += `
+          <div style="display:flex; align-items:center; margin-bottom:10px; background:#ffffff; padding:12px; border-radius:10px; box-shadow:0 2px 8px rgba(217,119,6,0.1);">
+            <div style="font-size:16px; font-weight:900; color:#d97706; width:28px; text-align:center; margin-right:8px;">${idx + 1}</div>
+            <div style="flex:1;">
+              <div style="font-size:12px; font-weight:800; color:#dc2626; margin-bottom:2px;">Lv.${m.level} ${rankNames[m.level]}</div>
+              <div style="font-size:15px; font-weight:800; color:#451a03; letter-spacing:-0.5px;">${maskedName} 회원님</div>
+            </div>
+          </div>
+        `;
+      });
+      
+      if (members.length === 0) {
+        html = "<div style='text-align:center; font-size:13px; color:#92400e; margin-top:20px; line-height:1.6;'>아직 명예의 전당에 오른<br>회원님이 없습니다.<br>(10회 수강 시 2레벨 등재)</div>";
+      }
+      hofList.innerHTML = html;
+    } catch (err) { hofList.innerHTML = "<div style='text-align:center; font-size:12px; color:red;'>집계 실패</div>"; }
+  }
+
   function toggleBenefits() {
     const list = document.getElementById("dash-benefits-list");
     list.style.display = list.style.display === "none" ? "block" : "none";
   }
 
-  // 대시보드 진행중 예약 상세보기 토글
   function toggleUpcoming() {
     const list = document.getElementById("dash-upcoming-list");
     list.style.display = list.style.display === "none" ? "block" : "none";
@@ -372,6 +455,7 @@
           if (!snap.empty) { currentUser = { id: snap.docs[0].id, ...snap.docs[0].data() }; showMemberView(true); }
         }
       }
+      loadHallOfFame(); // 명예의 전당 실행
     } catch (err) { alert("로드 실패"); }
   }
   initGym();
@@ -409,7 +493,6 @@
     document.getElementById("view-login").classList.add("active");
   }
 
-  // 🌟 메인 화면 로딩 🌟
   async function showMemberView(isAuto = false) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.getElementById("view-member").classList.add("active");
@@ -438,17 +521,12 @@
       schedules.sort((a,b) => { if(a.date !== b.date) return a.date.localeCompare(b.date); return a.time.localeCompare(b.time); });
       
       document.getElementById("dash-upcoming-count").innerText = schedules.length;
-      
       const listEl = document.getElementById("dash-upcoming-list");
-      if(schedules.length === 0) {
-        listEl.innerHTML = "예약된 수업이 없습니다.";
-      } else {
+      if(schedules.length === 0) { listEl.innerHTML = "예약된 수업이 없습니다."; } else {
         const daysArr = ["일", "월", "화", "수", "목", "금", "토"];
         let html = "";
         schedules.forEach(s => {
-          const d = new Date(s.date);
-          const dayStr = daysArr[d.getDay()];
-          const [yyyy, mm, dd] = s.date.split('-');
+          const d = new Date(s.date); const dayStr = daysArr[d.getDay()]; const [yyyy, mm, dd] = s.date.split('-');
           html += `<div style="margin-bottom:2px;">• ${mm}월 ${dd}일 (${dayStr}) ${s.time}</div>`;
         });
         listEl.innerHTML = html;
@@ -472,23 +550,19 @@
   function setNoPain() { document.getElementById("book-condition").value = "특이사항 없음 (이상 없음)"; }
 
   function renderMonthCalendar(containerId, isMember) {
-    const strip = document.getElementById(containerId);
-    strip.innerHTML = "";
+    const strip = document.getElementById(containerId); strip.innerHTML = "";
     const days = ["일", "월", "화", "수", "목", "금", "토"];
     const now = new Date(); const year = now.getFullYear(); const month = now.getMonth();
     const todayDate = now.getDate(); const lastDay = new Date(year, month + 1, 0).getDate();
     
     for (let i = 1; i <= lastDay; i++) {
       const d = new Date(year, month, i);
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
-      const dateStr = `${d.getFullYear()}-${mm}-${dd}`;
-      const shortDate = `${mm}-${dd}`;
+      const mm = String(d.getMonth() + 1).padStart(2, '0'); const dd = String(d.getDate()).padStart(2, '0');
+      const dateStr = `${d.getFullYear()}-${mm}-${dd}`; const shortDate = `${mm}-${dd}`;
       
       const holidayName = holidays[dateStr] || holidays[shortDate];
       let colorClass = "";
-      if (holidayName || d.getDay() === 0) colorClass = "sunday";
-      else if (d.getDay() === 6) colorClass = "saturday";
+      if (holidayName || d.getDay() === 0) colorClass = "sunday"; else if (d.getDay() === 6) colorClass = "saturday";
       
       const btn = document.createElement("div");
       btn.className = `cal-day-btn ${i === todayDate ? 'active' : ''} ${colorClass}`;
@@ -517,8 +591,7 @@
     const renderTimes = (title, times) => {
       const titleDiv = document.createElement("div");
       titleDiv.style = "grid-column: span 3; font-size: 13px; font-weight: 700; color: var(--primary); margin-top: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px;";
-      titleDiv.innerText = title;
-      grid.appendChild(titleDiv);
+      titleDiv.innerText = title; grid.appendChild(titleDiv);
 
       times.forEach(time => {
         const isBooked = blockedSet.has(time);
@@ -561,9 +634,7 @@
       const newRem = currentUser.remainingSessions - 1;
       await db.collection("members").doc(currentUser.id).update({ remainingSessions: newRem, lastBookingDate: selectedDate });
       currentUser.remainingSessions = newRem;
-      alert("예약되었습니다."); 
-      showMemberView(true);
-      switchMemberSubTab('my');
+      alert("예약되었습니다."); showMemberView(true); switchMemberSubTab('my'); loadHallOfFame();
     } catch (err) { alert("예약 오류"); }
   }
 
@@ -572,8 +643,7 @@
     try {
       const snap = await db.collection("reservations").where("gymId", "==", currentGymId).where("memberId", "==", currentUser.id).where("status", "==", "예약완료").get();
       if (snap.empty) { list.innerHTML = "<p style='text-align:center;'>예약 내역이 없습니다.</p>"; return; }
-      list.innerHTML = "";
-      const now = new Date();
+      list.innerHTML = ""; const now = new Date();
       const schedules = snap.docs.map(d => ({id: d.id, ...d.data()}));
       schedules.sort((a,b) => { if(a.date !== b.date) return a.date.localeCompare(b.date); return a.time.localeCompare(b.time); });
       schedules.forEach(data => {
@@ -595,9 +665,7 @@
       const newRem = currentUser.remainingSessions + 1;
       await db.collection("members").doc(currentUser.id).update({ remainingSessions: newRem });
       currentUser.remainingSessions = newRem;
-      alert("취소되었습니다."); 
-      showMemberView(true);
-      switchMemberSubTab('my');
+      alert("취소되었습니다."); showMemberView(true); switchMemberSubTab('my'); loadHallOfFame();
     } catch (err) { alert("취소 오류"); }
   }
 
@@ -622,7 +690,13 @@
 
     if (tab === 'unbooked') loadUnbookedMembers();
     if (tab === 'calendar') renderMonthCalendar("trainer-calendar-strip", false);
-    if (tab === 'selfbook') { renderMonthCalendar("trainer-self-cal-strip", false); populateProxySelect(); }
+    if (tab === 'selfbook') {
+      renderMonthCalendar("trainer-self-cal-strip", false);
+      // 대리예약 탭 진입 시 검색창 초기화
+      document.getElementById("proxy-member-search").value = "";
+      document.getElementById("proxy-member-id").value = "";
+      document.getElementById("proxy-member-list").style.display = "none";
+    }
     if (tab === 'recent') loadRecentBookings();
   }
 
@@ -649,7 +723,7 @@
     const inputPin = prompt(`정말 [${mName}] 회원을 삭제하시겠습니까?\n삭제하시려면 관리자 비밀번호를 입력해 주세요.`);
     if (inputPin === null) return; 
     if (inputPin !== currentGymData.pin) return alert("비밀번호 불일치");
-    try { await db.collection("members").doc(mId).delete(); alert("삭제 완료"); loadUnbookedMembers(); } catch (err) { alert("삭제 오류"); }
+    try { await db.collection("members").doc(mId).delete(); alert("삭제 완료"); loadUnbookedMembers(); loadHallOfFame(); } catch (err) { alert("삭제 오류"); }
   }
 
   async function loadUnbookedMembers() {
@@ -698,7 +772,7 @@
         const mDoc = await db.collection("members").doc(mId).get();
         if (mDoc.exists) await db.collection("members").doc(mId).update({ remainingSessions: (mDoc.data().remainingSessions || 0) + 1 });
       }
-      alert("일정이 취소되었습니다."); loadTrainerSchedule();
+      alert("일정이 취소되었습니다."); loadTrainerSchedule(); loadHallOfFame();
     } catch (err) { alert("취소 중 오류"); }
   }
 
@@ -710,12 +784,30 @@
     document.getElementById("area-proxy-input").style.display = mode === "proxy" ? "block" : "none";
   }
 
-  function populateProxySelect() {
-    const sel = document.getElementById("proxy-member-select"); sel.innerHTML = `<option value="">-- 회원 선택 --</option>`;
-    if(allMembersData.length === 0) { setTimeout(populateProxySelect, 1000); return; }
-    [...allMembersData].sort((a,b) => a.name.localeCompare(b.name)).forEach(m => {
-      if(m.remainingSessions > 0) sel.innerHTML += `<option value="${m.id}">${m.name} (잔여: ${m.remainingSessions}회)</option>`;
-    });
+  // 🌟 대리예약 회원 자동완성(초성/이름) 검색 함수 🌟
+  function filterProxyMembers() {
+    const query = document.getElementById("proxy-member-search").value.toLowerCase();
+    const listDiv = document.getElementById("proxy-member-list");
+    document.getElementById("proxy-member-id").value = ""; // 검색어 바뀌면 선택 초기화
+    
+    if (!query) { listDiv.style.display = "none"; return; }
+    if (allMembersData.length === 0) { listDiv.style.display = "none"; return; }
+
+    const filtered = allMembersData.filter(m => m.name.toLowerCase().includes(query) && m.remainingSessions > 0);
+    
+    if (filtered.length === 0) {
+      listDiv.innerHTML = "<div style='padding:12px; font-size:13px; color:#64748b;'>검색 결과가 없습니다.</div>";
+    } else {
+      listDiv.innerHTML = filtered.map(m => `<div class="proxy-member-item" onclick="selectProxyMember('${m.id}', '${m.name}')">${m.name} (잔여: ${m.remainingSessions}회)</div>`).join("");
+    }
+    listDiv.style.display = "block";
+  }
+
+  // 검색목록에서 클릭 시 선택 처리
+  function selectProxyMember(id, name) {
+    document.getElementById("proxy-member-id").value = id;
+    document.getElementById("proxy-member-search").value = name;
+    document.getElementById("proxy-member-list").style.display = "none";
   }
 
   async function loadTrainerSelfSlots(dateStr) {
@@ -741,14 +833,20 @@
         alert("마감되었습니다."); document.getElementById("self-memo").value = ""; loadTrainerSelfSlots(date);
       } catch (err) { alert("오류발생"); }
     } else if (currentBookMode === "proxy") {
-      const mId = document.getElementById("proxy-member-select").value;
-      if (!mId) return alert("회원 선택 필수");
+      const mId = document.getElementById("proxy-member-id").value;
+      if (!mId) return alert("대리 예약할 회원을 정확히 검색 후 선택해 주세요.");
+      
       const targetM = allMembersData.find(m => m.id === mId);
       if (!confirm(`[${targetM.name}] 대리 예약 진행 시 횟수가 1회 즉시 차감됩니다.`)) return;
       try {
         await db.collection("reservations").add({ gymId: currentGymId, memberId: targetM.id, memberName: targetM.name, phone: targetM.phone, date: date, time: time, condition: "트레이너 대리 예약", trainer: currentGymData.name, status: "예약완료", createdAt: new Date().toISOString() });
         await db.collection("members").doc(targetM.id).update({ remainingSessions: targetM.remainingSessions - 1, lastBookingDate: date });
-        alert("대리 예약 확정(차감됨)"); loadUnbookedMembers().then(() => populateProxySelect()); loadTrainerSelfSlots(date);
+        alert("대리 예약 확정(차감됨)"); 
+        loadUnbookedMembers(); 
+        loadTrainerSelfSlots(date);
+        loadHallOfFame(); // 전당도 업데이트
+        document.getElementById("proxy-member-search").value = "";
+        document.getElementById("proxy-member-id").value = "";
       } catch (err) { alert("오류발생"); }
     }
   }
@@ -770,9 +868,23 @@
     } catch (err) { list.innerHTML = "조회 실패"; }
   }
 
+  // 🌟 정보수정 렌더링 시 레벨, 출석횟수, 이미지 계산 로직 추가 🌟
   function editMemberInfo(mId, name, rem, tot, goal, phone, gender, expire) {
     document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
     document.getElementById("view-edit-member").classList.add("active");
+    
+    // 레벨 및 캐릭터 업데이트
+    const attended = Math.max(0, tot - rem);
+    let level = Math.floor(attended / 10) + 1;
+    if (level > 10) level = 10;
+    if (level < 1) level = 1;
+    const g = gender === 'female' ? 'female' : 'male';
+    
+    document.getElementById("edit-char-img").src = `./images/${g}_member_${level}.png`;
+    document.getElementById("edit-level-disp").innerText = level;
+    document.getElementById("edit-rank-disp").innerText = rankNames[level];
+    document.getElementById("edit-attended-disp").innerText = attended;
+
     document.getElementById("edit-member-id").value = mId; document.getElementById("edit-name").value = name;
     document.getElementById("edit-phone").value = phone; document.getElementById("edit-total").value = tot;
     document.getElementById("edit-remaining").value = rem; document.getElementById("edit-goal").value = goal;
@@ -792,14 +904,19 @@
         gender: document.getElementById("edit-gender").value,
         expireDate: document.getElementById("edit-expire").value
       });
-      alert("수정 완료"); cancelEditMember(); loadUnbookedMembers();
+      alert("수정 완료"); cancelEditMember(); loadUnbookedMembers(); loadHallOfFame();
     } catch (err) { alert("오류"); }
   }
 
+  // 🌟 신규 등록 시 총횟수 & 현재잔여횟수 각각 입력받아 저장 🌟
   async function registerMember() {
-    const n = document.getElementById("new-name").value.trim(); const p = document.getElementById("new-phone").value.trim();
-    const t = parseInt(document.getElementById("new-total").value); const g = document.getElementById("new-goal").value.trim();
-    const gender = document.getElementById("new-gender").value; const expire = document.getElementById("new-expire").value;
+    const n = document.getElementById("new-name").value.trim(); 
+    const p = document.getElementById("new-phone").value.trim();
+    const t = parseInt(document.getElementById("new-total").value, 10) || 0; 
+    const r = parseInt(document.getElementById("new-remaining").value, 10) || 0;
+    const g = document.getElementById("new-goal").value.trim();
+    const gender = document.getElementById("new-gender").value; 
+    const expire = document.getElementById("new-expire").value;
     
     if (!n || !p) return alert("이름/번호를 입력하세요.");
     if (!expire) return alert("유효기간(만료 날짜)을 선택해 주세요.");
@@ -808,10 +925,11 @@
       const checkSnap = await db.collection("members").where("gymId", "==", currentGymId).where("phone", "==", p).get();
       if (!checkSnap.empty) return alert(`중복 번호입니다. (${checkSnap.docs[0].data().name} 회원님)`);
 
-      await db.collection("members").add({ gymId: currentGymId, name: n, phone: p, totalSessions: t, remainingSessions: t, goal: g || "체력 증진", role: "member", gender: gender, expireDate: expire, lastBookingDate: new Date().toISOString().split("T")[0] });
+      await db.collection("members").add({ gymId: currentGymId, name: n, phone: p, totalSessions: t, remainingSessions: r, goal: g || "체력 증진", role: "member", gender: gender, expireDate: expire, lastBookingDate: new Date().toISOString().split("T")[0] });
       alert("등록되었습니다."); 
       document.getElementById("new-name").value = ""; document.getElementById("new-phone").value = ""; document.getElementById("new-expire").value = "";
       switchTrainerSubTab('unbooked');
+      loadHallOfFame();
     } catch (err) { alert("등록 실패"); }
   }
 </script>
