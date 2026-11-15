@@ -766,12 +766,21 @@
       btnBatch.style.display = "block"; // 일괄 등록 버튼 보이기
       
       list.innerHTML = "";
-      schedules.forEach(s => {
+     schedules.forEach(s => {
         const isSelf = (s.memberId === "admin-self-booking");
         const badgeTxt = isSelf ? "일정 차단" : "예약됨";
         const badgeColor = isSelf ? "background:#fef3c7; color:#b45309;" : "background:#dbeafe; color:#1d4ed8;";
+        
+        // 🌟 이름 옆에 잔여 횟수 표시 로직 🌟
+        let displayName = s.memberName;
+        if (!isSelf) {
+          const mem = allMembersData.find(m => m.id === s.memberId);
+          const rem = mem ? mem.remainingSessions : '?';
+          displayName = `${s.memberName} (${rem}회)`;
+        }
+
         const item = document.createElement("div"); item.className = "schedule-item";
-        item.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;"><strong style="font-size:15px; color:var(--primary);">${s.time}</strong><div><span style="font-weight:700; margin-right:6px;">${s.memberName}</span><span class="badge" style="${badgeColor}">${badgeTxt}</span></div></div>
+        item.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;"><strong style="font-size:15px; color:var(--primary);">${s.time}</strong><div><span style="font-weight:700; margin-right:6px;">${displayName}</span><span class="badge" style="${badgeColor}">${badgeTxt}</span></div></div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;"><div style="font-size:13px; color:var(--sub-text);">메모: ${s.condition}</div><button type="button" class="danger-btn" style="padding: 6px 12px; font-size: 12px; width: auto;" onclick="forceCancelReservation('${s.id}', '${s.memberName}', '${s.memberId}')">예약 취소</button></div>`;
         list.appendChild(item);
       });
