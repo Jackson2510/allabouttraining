@@ -787,17 +787,22 @@
     } catch (err) { list.innerHTML = "조회 실패"; }
   }
 
-  // 🌟 구글 캘린더 파일(.ics) 일괄 다운로드 함수 🌟
+  // 🌟 구글 캘린더 다이렉트 일괄 등록 함수 (GAS 연동) 🌟
   function batchRegisterCalendar() {
     if (!currentDaySchedules || currentDaySchedules.length === 0) return alert("등록할 일정이 없습니다.");
 
-    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//AllAboutTraining//PT Schedule//KO\n";
-    let addedCount = 0;
+    // ★ 여기에 방금 구글에서 복사한 '웹 앱 URL'을 따옴표 안에 넣어주세요! ★
+    const SCRIPT_URL = "여기에_복사한_URL을_붙여넣으세요"; 
+
+    if (SCRIPT_URL === "여기에_복사한_URL을_붙여넣으세요") return alert("개발자 도구: 웹 앱 URL을 먼저 입력해 주세요.");
+    if (!confirm(`총 ${currentDaySchedules.length}개의 일정을 구글 캘린더에 다이렉트로 등록하시겠습니까?`)) return;
+
+    let successCount = 0;
 
     currentDaySchedules.forEach(s => {
       if (s.status === "취소") return;
-      addedCount++;
 
+      // 이름 및 잔여 횟수 세팅
       let title = s.memberName;
       if (s.memberId !== "admin-self-booking") {
         const mem = allMembersData.find(m => m.id === s.memberId);
@@ -805,31 +810,34 @@
         title = `${s.memberName} (${rem}회)`;
       }
 
+      // 날짜 및 시간 포맷 변환
       const [yyyy, mm, dd] = s.date.split("-");
       const [hh, min] = s.time.split(":");
-      const startStr = `${yyyy}${mm}${dd}T${hh}${min}00`;
       let endH = parseInt(hh, 10) + 1;
-      const endStr = `${yyyy}${mm}${dd}T${String(endH).padStart(2, '0')}${min}00`;
 
-      icsContent += "BEGIN:VEVENT\n";
-      icsContent += `SUMMARY:${title}\n`;
-      icsContent += `DTSTART:${startStr}\n`;
-      icsContent += `DTEND:${endStr}\n`;
-      icsContent += `DESCRIPTION:${s.condition || ''}\n`;
-      icsContent += "END:VEVENT\n";
+      // 앱스 스크립트로 보낼 데이터 꾸러미
+      const payload = {
+        title: title,
+        startTime: `${yyyy}-${mm}-${dd}T${hh}:${min}:00+09:00`,
+        endTime: `${yyyy}-${mm}-${dd}T${String(endH).padStart(2, '0')}:${min}:00+09:00`,
+        description: s.condition || '특이사항 없음'
+      };
+
+      // 구글 스크립트로 데이터 전송 (CORS 우회를 위해 text/plain 사용)
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      }).catch(err => console.log("전송 에러", err));
+      
+      successCount++;
     });
 
-    icsContent += "END:VCALENDAR";
-    if (addedCount === 0) return alert("등록할 유효한 일정이 없습니다.");
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = `PT일정_${trainerSelectedDate}.ics`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    alert("일정 파일이 다운로드 되었습니다.\n받으신 파일을 열면 스마트폰/구글 캘린더에 일괄 등록됩니다!");
+    if (successCount > 0) {
+      alert(`${successCount}개의 일정이 구글 캘린더로 전송되었습니다.\n(구글 캘린더 앱을 켜서 새로고침 해보세요!)`);
+    } else {
+      alert("등록할 유효한 일정이 없습니다.");
+    }
   }
 
   async function forceCancelReservation(resId, mName, mId) {
