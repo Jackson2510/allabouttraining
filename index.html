@@ -792,8 +792,7 @@
     if (!currentDaySchedules || currentDaySchedules.length === 0) return alert("등록할 일정이 없습니다.");
 
     // ★ 여기에 방금 구글에서 복사한 '웹 앱 URL'을 따옴표 안에 넣어주세요! ★
-    const SCRIPT_URL = "여기에_복사한_URL을_붙여넣으세요"; 
-
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfQhgt-t29YJUYt6paJJxTCDnyovPqqqA1_etxPrPsHzSll21qKGOcgyNtx2JhU_s/exec";
     if (SCRIPT_URL === "여기에_복사한_URL을_붙여넣으세요") return alert("개발자 도구: 웹 앱 URL을 먼저 입력해 주세요.");
     if (!confirm(`총 ${currentDaySchedules.length}개의 일정을 구글 캘린더에 다이렉트로 등록하시겠습니까?`)) return;
 
