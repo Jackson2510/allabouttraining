@@ -775,19 +775,46 @@
     try { await db.collection("members").doc(mId).delete(); alert("삭제 완료"); loadUnbookedMembers(); loadHallOfFame(); } catch (err) { alert("삭제 오류"); }
   }
 
-  // 🌟 회원 데이터 불러오기 (정렬 로직 적용) 🌟
+  // 🌟 회원 데이터 불러오기 (한국 시간 시차 버그 완벽 해결) 🌟
   async function loadUnbookedMembers() {
     const list = document.getElementById("unbooked-members-list"); list.innerHTML = "조회 중...";
     try {
       const snap = await db.collection("members").where("gymId", "==", currentGymId).get();
-      const today = new Date(); allMembersData = [];
+      
+      // 🌟 한국 시간 기준으로 오늘 자정(0시 0분 0초) 세팅
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); 
+      
+      allMembersData = [];
       snap.docs.forEach(doc => {
-        const m = doc.data(); if (m.role === 'trainer' || m.role === 'admin') return;
+        const m = doc.data(); 
+        if (m.role === 'trainer' || m.role === 'admin') return;
         m.id = doc.id;
-        const lastDate = m.lastBookingDate ? new Date(m.lastBookingDate) : new Date("2026-01-01");
-        m.diffDays = Math.floor((today - lastDate) / 86400000);
+        
+        // 마지막 예약 날짜를 정확히 한국 달력 기준으로 쪼개서 비교
+        let lastDate;
+        if (m.lastBookingDate) {
+          const parts = m.lastBookingDate.split('-');
+          lastDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        } else {
+          lastDate = new Date(2026, 0, 1); // 2026-01-01
+        }
+        lastDate.setHours(0, 0, 0, 0);
+        
+        m.diffDays = Math.round((today - lastDate) / 86400000);
         allMembersData.push(m);
       });
+      
+      // 정렬: 오늘수업(0) 맨 위 -> 미출석(양수, 큰순서) -> 미래예약(음수, 큰순서)
+      allMembersData.sort((a, b) => {
+        if (a.diffDays === 0 && b.diffDays !== 0) return -1;
+        if (b.diffDays === 0 && a.diffDays !== 0) return 1;
+        return b.diffDays - a.diffDays;
+      });
+      
+      filterMembers();
+    } catch (err) { list.innerHTML = "조회 실패"; }
+  }
       
       // 정렬: 오늘수업(0) 맨 위 -> 미출석(양수, 큰순서) -> 미래예약(음수, 큰순서)
       allMembersData.sort((a, b) => {
