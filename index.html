@@ -140,8 +140,12 @@
 
   <!-- 2. 회원 화면 -->
   <div id="view-member" class="section">
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-      <button type="button" onclick="logout()" style="width: auto; padding: 6px 12px; font-size: 12px;" class="sub-btn">로그아웃</button>
+    <!-- 🌟 수정된 부분: 로그아웃 좌측에 초록색 인포크 링크 배너 추가 🌟 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
+      <a href="https://link.inpock.co.kr/real_health_consume" target="_blank" style="flex: 1; background: #10b981; color: #ffffff; text-align: center; text-decoration: none; padding: 8px; font-size: 13px; font-weight: 700; border-radius: 8px; border: 1px solid #059669;">
+        🛒 잭슨쌤 추천 가성비 품질좋은 식단 제품
+      </a>
+      <button type="button" onclick="logout()" style="width: auto; padding: 8px 12px; font-size: 12px; margin: 0; white-space: nowrap;" class="sub-btn">로그아웃</button>
     </div>
 
     <!-- RPG 대시보드 -->
