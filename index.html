@@ -140,7 +140,8 @@
 
   <!-- 2. 회원 화면 -->
   <div id="view-member" class="section">
-    <!-- 🌟 수정된 부분: 로그아웃 좌측에 초록색 인포크 링크 배너 추가 🌟 -->
+    
+    <!-- 🌟 수정: 로그아웃 옆 인포크 링크 배너 삽입 🌟 -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px;">
       <a href="https://link.inpock.co.kr/real_health_consume" target="_blank" style="flex: 1; background: #10b981; color: #ffffff; text-align: center; text-decoration: none; padding: 8px; font-size: 13px; font-weight: 700; border-radius: 8px; border: 1px solid #059669;">
         🛒 잭슨쌤 추천 가성비 품질좋은 식단 제품
@@ -242,7 +243,7 @@
       <div class="tab" id="tab-trainer-recent" onclick="switchTrainerSubTab('recent')">최근예약</div>
     </div>
 
-    <!-- 🌟 수정된 회원 목록 (오늘 수업 최상단, 정렬 개선) 🌟 -->
+    <!-- 🌟 회원 목록 (시차 버그 및 정렬 완벽 적용) 🌟 -->
     <div id="sub-trainer-unbooked">
       <div style="margin-bottom: 12px;">
         <input type="text" id="search-member" placeholder="회원 이름 또는 전화번호 검색" oninput="filterMembers()" style="margin-bottom: 6px;">
@@ -710,7 +711,7 @@
     if (tab === 'recent') loadRecentBookings();
   }
 
-  // 🌟 정렬 개선, 오늘 수업 강조, 문구 변경이 적용된 회원 목록 그리기 🌟
+  // 🌟 정렬 및 오늘 수업 강조 로직 🌟
   function filterMembers() {
     const query = document.getElementById("search-member").value.toLowerCase();
     const list = document.getElementById("unbooked-members-list"); list.innerHTML = "";
@@ -781,7 +782,6 @@
     try {
       const snap = await db.collection("members").where("gymId", "==", currentGymId).get();
       
-      // 🌟 한국 시간 기준으로 오늘 자정(0시 0분 0초) 세팅
       const today = new Date();
       today.setHours(0, 0, 0, 0); 
       
@@ -791,13 +791,12 @@
         if (m.role === 'trainer' || m.role === 'admin') return;
         m.id = doc.id;
         
-        // 마지막 예약 날짜를 정확히 한국 달력 기준으로 쪼개서 비교
         let lastDate;
         if (m.lastBookingDate) {
           const parts = m.lastBookingDate.split('-');
           lastDate = new Date(parts[0], parts[1] - 1, parts[2]);
         } else {
-          lastDate = new Date(2026, 0, 1); // 2026-01-01
+          lastDate = new Date(2026, 0, 1);
         }
         lastDate.setHours(0, 0, 0, 0);
         
@@ -805,18 +804,6 @@
         allMembersData.push(m);
       });
       
-      // 정렬: 오늘수업(0) 맨 위 -> 미출석(양수, 큰순서) -> 미래예약(음수, 큰순서)
-      allMembersData.sort((a, b) => {
-        if (a.diffDays === 0 && b.diffDays !== 0) return -1;
-        if (b.diffDays === 0 && a.diffDays !== 0) return 1;
-        return b.diffDays - a.diffDays;
-      });
-      
-      filterMembers();
-    } catch (err) { list.innerHTML = "조회 실패"; }
-  }
-      
-      // 정렬: 오늘수업(0) 맨 위 -> 미출석(양수, 큰순서) -> 미래예약(음수, 큰순서)
       allMembersData.sort((a, b) => {
         if (a.diffDays === 0 && b.diffDays !== 0) return -1;
         if (b.diffDays === 0 && a.diffDays !== 0) return 1;
@@ -867,11 +854,10 @@
     } catch (err) { list.innerHTML = "조회 실패"; }
   }
 
-  // 구글 캘린더 다이렉트 일괄 등록 함수 (GAS 연동)
+  // 🌟 구글 캘린더 다이렉트 일괄 등록 함수 (GAS 연동) 🌟
   function batchRegisterCalendar() {
     if (!currentDaySchedules || currentDaySchedules.length === 0) return alert("등록할 일정이 없습니다.");
 
-    // ★ 여기에 방금 구글에서 복사한 '웹 앱 URL'을 따옴표 안에 넣어주세요! ★
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfQhgt-t29YJUYt6paJJxTCDnyovPqqqA1_etxPrPsHzSll21qKGOcgyNtx2JhU_s/exec";
     if (SCRIPT_URL === "여기에_복사한_URL을_붙여넣으세요") return alert("개발자 도구: 웹 앱 URL을 먼저 입력해 주세요.");
     if (!confirm(`총 ${currentDaySchedules.length}개의 일정을 구글 캘린더에 다이렉트로 등록하시겠습니까?`)) return;
